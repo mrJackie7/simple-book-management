@@ -1,0 +1,13 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.row > div[class*="col-"] {
+  display: flex;
+}
+
+img {
+  object-fit: contain;
+}

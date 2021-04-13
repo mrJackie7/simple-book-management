@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD Test Book Store Simulation</title>
+  <link rel="stylesheet" href="/assets/style/bootstrap.css" type="text/css"/>
+  <link rel="stylesheet" href="/assets/style/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Book Store Simulation</h2>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalBook">Add New Book</button>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModalWriter">Add New Writer</button>
+    <button type="button" class="btn  btn-warning" data-toggle="modal" data-target="#myModalCategory">Add New Category</button>
+    {{!-- Get data from product_db --}}
+    {{!-- Make it in Card --}}
+    <div class="row">
+      {{#each books}}
+      <div class="col-sm-3">
+        <div class="card" style="width: 18rem;">
+          <img src="/assets/img/{{ img_url }}" class="card-img-top" alt="some foto" style="height: 400px;">
+          <div class="card-body" style="line-height: 0.7em;">
+            <h5 class="card-title">{{ book_name }}</h5>
+            <p>#{{ category_name }}</p>
+            <p>{{ writter_name }}</p>
+            <p>{{ publication_year }}</p>
+          </div>
+          <button type="button" class="btn  btn-info" data-toggle="modal" data-target="#modal{{ book_id }}Book" style="width: auto;">View More</button>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+
+  {{!-- un-showed modals --}}
+  {{!-- Modal to see book's selected data --}}
+  {{#each books}}
+  <div class="modal fade" id="modal{{book_id}}Book" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        {{!-- modeal header --}}
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">About This Book</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {{!-- modal body --}}
+        <div class="modal-body">
+          <div class="media">
+            <span class="media-left">
+              <img style="width: 220px; height: 100%;" src="/assets/img/{{ img_url }}" />
+            </span>
+            <div class="media-right" style="margin-left: 5px; font-size: 14px;">
+              <h6>Judul: {{ book_name }}</h6>
+              <p>#{{ category_name }}</p>
+              <p>Penulis: {{ writter_name}}</p>
+              <p>Publikasi: {{ publication_year }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="javascript:void(0)" class="btn btn-sm btn-info editBook" data-id="{{ book_id }}" data-book_name="{{ book_name }}" data-publication_year="{{ publication_year }}" data-img_url="{{ img_url }}">Edit</a>
+          <a href="javascript:void(0)" class="btn btn-sm btn-danger deleteBook" data-id="{{ book_id }}">Delete</a>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+  
+  {{!-- Modal form add book data --}}
+  <form action="/saveBook" method="post" encType="multipart/form-data">
+    <div class="modal fade" id="myModalBook" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            {{!-- Header of Modal Form --}}
+            <h5 class="modal-title" id="exampleModalLabel">Add New Book</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          {{!-- Modal Body --}}
+          <div class="modal-body">
+            <div class="form-group">
+              <input type="text" name="book_name" class="form-control" placeholder="Book Name" required />
+            </div>
+            <div class="form-group">
+              <label for="category_name">Select Category</label>
+              <select id="category_name" class="custom-select" required>
+                <option value="">Select Category</option>
+                {{#each category}}
+                <option value="{{ category_id }}">{{ category_name }}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="writer_name">Select Writer</label>
+              <select id="writer_name" class="custom-select" required>
+                <option value="">Select Writer</option>
+                {{#each writer}}
+                <option value="{{ writer_id }}">{{ writter_name }}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="text" name="publication_year" class="form-control" placeholder="Publication Year" required />
+            </div>
+            <div class="form-group">
+              <label for="sampleFile">Upload Image</label>
+              <input type="file" name="sampleFile" accept="image/*" class="form-control-file" required/>
+            </div>
+            <input type="hidden" name="writer_id" value="1" id="hiddenIdWriter">
+            <input type="hidden" name="category_id" value="1" id="hiddenIdCategory">
+          </div>
+          {{!-- Footer of Modal Form --}}
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {{!-- Modal form add writer data --}}
+  <form action="/saveWriter" method="post">
+    <div class="modal fade" id="myModalWriter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <input type="text" name="writer_name" class="form-control" placeholder="Writer Name" required />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {{!-- Modal Form add category data --}}
+  <form action="/saveCategory" method="post">
+    <div class="modal fade" id="myModalCategory" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <input type="text" name="category_name" class="form-control" placeholder="Writer Name" required />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {{!-- Modal form edit data --}}
+  <form action="/update" method="post" encType="multipart/form-data">
+    <div
+      class="modal fade"
+      id="myEditModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <input
+                type="text"
+                name="book_name"
+                class="form-control book_name"
+                placeholder="Product Name"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="category_nameEdit">Select Category</label>
+              <select id="category_nameEdit" class="custom-select" required>
+                <option value="">Select Category</option>
+                {{#each category}}
+                <option value="{{ category_id }}">{{ category_name }}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="writer_nameEdit">Select Writer</label>
+              <select id="writer_nameEdit" class="custom-select" required>
+                <option value="">Select Writer</option>
+                {{#each writer}}
+                <option value="{{ writer_id }}">{{ writter_name }}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                name="publication_year"
+                class="form-control publication_year"
+                placeholder="Publication Year"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="sampleFile" id="oldImgFile">Upload Image</label>
+              <input type="file" name="sampleFile" accept="image/*" class="form-control-file" required/>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="hidden" name="book_id" class="book_id" />
+            <input type="hidden" name="writer_id" id="hiddenEditWriter">
+            <input type="hidden" name="category_id" id="hiddenEditCategory">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {{!-- Modal form delete data --}}
+  <form id="add-row-form" action="/delete" method="post">
+    <div
+      class="modal fade"
+      id="myDeleteModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <strong>Are you sure to delete this product?</strong>
+          </div>
+          <div class="modal-footer">
+            <input
+              type="hidden"
+              name="book_id"
+              class="form-control book_id2"
+            />
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <script src="/assets/js/jquery-3.6.0.js"></script>
+  <script src="/assets/js/popper.min.js"></script>
+  <script src="/assets/js/bootstrap.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('#category_name').on('change', function(){
+        let category_id = this.value
+        $('#hiddenIdCategory').val(category_id)
+      })
+
+      $('#writer_name').on('change', function(){
+        let writer_id = this.value
+        $('#hiddenIdWriter').val(writer_id)
+      })
+      // Showing data to modal for edit record
+      $('.editBook').on('click', function(){
+        let book_id = $(this).data('id')
+        let book_name = $(this).data('book_name')
+        let publication_year = $(this).data('publication_year')
+        let img_url = $(this).data('img_url')
+
+        $('#myEditModal').modal('show')
+
+        $('.book_id').val(book_id)
+        $('.book_name').val(book_name)
+        $('.publication_year').val(publication_year)
+        $('#oldImgFile').text(`Old Image: ${img_url}`)
+      })
+
+      $('#category_nameEdit').on('change', function(){
+        let category_id = this.value
+        $('#hiddenEditCategory').val(category_id)
+      })
+
+      $('#writer_nameEdit').on('change', function(){
+        let writer_id = this.value
+        $('#hiddenEditWriter').val(writer_id)
+      })
+
+      // Showing modal for delete record
+      $('.deleteBook').on('click', function(){
+        let book_id = $(this).data('id')
+        $('#myDeleteModal').modal('show')
+        $('.book_id2').val(book_id)
+      })
+    })
+  </script>
+</body>
+</html>
