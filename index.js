@@ -39,7 +39,7 @@ app.use(fileUpload());
 // Route for homepage
 app.get("/", (req, res) => {
   let sql = [
-    "SELECT book_tb.book_id, book_tb.book_name, category_tb.category_id ,category_tb.category_name, writer_tb.writer_id, writer_tb.writter_name, book_tb.publication_year, book_tb.img_url FROM book_tb INNER JOIN category_tb on book_tb.category_id = category_tb.category_id INNER JOIN writer_tb on book_tb.writer_id = writer_tb.writer_id",
+    "SELECT book_tb.book_id, book_tb.book_name, category_tb.category_id ,category_tb.category_name, writer_tb.writer_id, writer_tb.writter_name, book_tb.publication_year, book_tb.img_url FROM book_tb INNER JOIN category_tb on book_tb.category_id = category_tb.category_id INNER JOIN writer_tb on book_tb.writer_id = writer_tb.writer_id ORDER BY book_tb.book_id DESC",
     "SELECT * FROM category_tb",
     "SELECT * FROM writer_tb",
   ];
@@ -122,8 +122,6 @@ app.post("/update", (req, res) => {
   let img_url = sampleFile.name;
   let sql = `UPDATE book_tb SET book_name='${book_name}', category_id=${category_id}, writer_id=${writer_id}, publication_year='${publication_year}', img_url='${img_url}' WHERE book_id=${book_id}`;
 
-  console.log(sql);
-
   // Use mv() to place file on the server
   sampleFile.mv(uploadPath, (err) => {
     if (err) return res.send(err);
@@ -135,7 +133,6 @@ app.post("/update", (req, res) => {
 });
 
 app.post("/delete", (req, res) => {
-  console.log(Number(req.body.book_id));
   let sql = `DELETE FROM book_tb WHERE book_id=${req.body.book_id}`;
   let query = conn.query(sql, (err, results) => {
     if (err) throw err;

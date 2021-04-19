@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRUD Test Book Store Simulation</title>
+  <title>CRUD Test Book Library Simulation</title>
   <link rel="stylesheet" href="/assets/style/bootstrap.css" type="text/css"/>
   <link rel="stylesheet" href="/assets/style/style.css">
 </head>
 <body>
   <div class="container">
-    <h2>Book Store Simulation</h2>
+    <h2>Book Library Simulation</h2>
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalBook">Add New Book</button>
     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModalWriter">Add New Writer</button>
     <button type="button" class="btn  btn-warning" data-toggle="modal" data-target="#myModalCategory">Add New Category</button>
@@ -62,8 +62,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <a href="javascript:void(0)" class="btn btn-sm btn-info editBook" data-id="{{ book_id }}" data-book_name="{{ book_name }}" data-publication_year="{{ publication_year }}" data-img_url="{{ img_url }}">Edit</a>
-          <a href="javascript:void(0)" class="btn btn-sm btn-danger deleteBook" data-id="{{ book_id }}">Delete</a>
+          <a href="javascript:void(0)" style="padding: 0.5rem 0.8rem;" class="btn btn-sm btn-info editBook" data-id="{{ book_id }}" data-book_name="{{ book_name }}" data-publication_year="{{ publication_year }}" data-img_url="{{ img_url }}">Edit</a>
+          <a href="javascript:void(0)" style="padding: 0.5rem;" class="btn btn-sm btn-danger deleteBook" data-id="{{ book_id }}">Delete</a>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
